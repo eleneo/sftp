@@ -1,5 +1,5 @@
 FROM debian:buster
-MAINTAINER Adrian Dvergsdal [atmoz.net]
+LABEL Eleneo [eleneo.fr]
 
 # Steps done in one RUN layer:
 # - Install packages

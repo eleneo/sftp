@@ -1,13 +1,13 @@
 # SFTP
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/atmoz/sftp/build?logo=github) ![GitHub stars](https://img.shields.io/github/stars/atmoz/sftp?logo=github) ![Docker Stars](https://img.shields.io/docker/stars/atmoz/sftp?label=stars&logo=docker) ![Docker Pulls](https://img.shields.io/docker/pulls/atmoz/sftp?label=pulls&logo=docker)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/eleneo/sftp/build?logo=github) ![GitHub stars](https://img.shields.io/github/stars/eleneo/sftp?logo=github) ![Docker Stars](https://img.shields.io/docker/stars/eleneo/sftp?label=stars&logo=docker) ![Docker Pulls](https://img.shields.io/docker/pulls/eleneo/sftp?label=pulls&logo=docker)
 
-![OpenSSH logo](https://raw.githubusercontent.com/atmoz/sftp/master/openssh.png "Powered by OpenSSH")
+![OpenSSH logo](https://raw.githubusercontent.com/eleneo/sftp/master/openssh.png "Powered by OpenSSH")
 
 # Supported tags and respective `Dockerfile` links
 
-- [`debian`, `latest` (*Dockerfile*)](https://github.com/atmoz/sftp/blob/master/Dockerfile) ![Docker Image Size (debian)](https://img.shields.io/docker/image-size/atmoz/sftp/debian?label=debian&logo=debian&style=plastic)
-- [`alpine` (*Dockerfile*)](https://github.com/atmoz/sftp/blob/master/Dockerfile-alpine) ![Docker Image Size (alpine)](https://img.shields.io/docker/image-size/atmoz/sftp/alpine?label=alpine&logo=Alpine%20Linux&style=plastic)
+- [`debian`, `latest` (*Dockerfile*)](https://github.com/eleneo/sftp/blob/master/Dockerfile) ![Docker Image Size (debian)](https://img.shields.io/docker/image-size/eleneo/sftp/debian?label=debian&logo=debian&style=plastic)
+- [`alpine` (*Dockerfile*)](https://github.com/eleneo/sftp/blob/master/Dockerfile-alpine) ![Docker Image Size (alpine)](https://img.shields.io/docker/image-size/eleneo/sftp/alpine?label=alpine&logo=Alpine%20Linux&style=plastic)
 
 # Securely share your files
 
@@ -36,7 +36,7 @@ Easy to use SFTP ([SSH File Transfer Protocol](https://en.wikipedia.org/wiki/SSH
 ## Simplest docker run example
 
 ```
-docker run -p 22:22 -d atmoz/sftp foo:pass:::upload
+docker run -p 22:22 -d eleneo/sftp foo:pass:::upload
 ```
 
 User "foo" with password "pass" can login with sftp and upload files to a folder called "upload". No mounted directories or custom UID/GID. Later you can inspect the files and use `--volumes-from` to mount them somewhere else (or see next example).
@@ -48,7 +48,7 @@ Let's mount a directory and set UID:
 ```
 docker run \
     -v <host-dir>/upload:/home/foo/upload \
-    -p 2222:22 -d atmoz/sftp \
+    -p 2222:22 -d eleneo/sftp \
     foo:pass:1001
 ```
 
@@ -56,7 +56,7 @@ docker run \
 
 ```
 sftp:
-    image: atmoz/sftp
+    image: eleneo/sftp
     volumes:
         - <host-dir>/upload:/home/foo/upload
     ports:
@@ -74,7 +74,7 @@ The OpenSSH server runs by default on port 22, and in this example, we are forwa
 docker run \
     -v <host-dir>/users.conf:/etc/sftp/users.conf:ro \
     -v mySftpVolume:/home \
-    -p 2222:22 -d atmoz/sftp
+    -p 2222:22 -d eleneo/sftp
 ```
 
 <host-dir>/users.conf:
@@ -92,12 +92,12 @@ Add `:e` behind password to mark it as encrypted. Use single quotes if using ter
 ```
 docker run \
     -v <host-dir>/share:/home/foo/share \
-    -p 2222:22 -d atmoz/sftp \
+    -p 2222:22 -d eleneo/sftp \
     'foo:$1$0G2g0GSt$ewU0t6GXG15.0hWoOX8X9.:e:1001'
 ```
 
-Tip: you can use [atmoz/makepasswd](https://hub.docker.com/r/atmoz/makepasswd/) to generate encrypted passwords:  
-`echo -n "your-password" | docker run -i --rm atmoz/makepasswd --crypt-md5 --clearfrom=-`
+Tip: you can use [eleneo/makepasswd](https://hub.docker.com/r/eleneo/makepasswd/) to generate encrypted passwords:
+`echo -n "your-password" | docker run -i --rm eleneo/makepasswd --crypt-md5 --clearfrom=-`
 
 ## Logging in with SSH keys
 
@@ -108,7 +108,7 @@ docker run \
     -v <host-dir>/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub:ro \
     -v <host-dir>/id_other.pub:/home/foo/.ssh/keys/id_other.pub:ro \
     -v <host-dir>/share:/home/foo/share \
-    -p 2222:22 -d atmoz/sftp \
+    -p 2222:22 -d eleneo/sftp \
     foo::1001
 ```
 
@@ -121,7 +121,7 @@ docker run \
     -v <host-dir>/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key \
     -v <host-dir>/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key \
     -v <host-dir>/share:/home/foo/share \
-    -p 2222:22 -d atmoz/sftp \
+    -p 2222:22 -d eleneo/sftp \
     foo::1001
 ```
 
@@ -162,7 +162,7 @@ bindmount /data/common /home/peter/common
 bindmount /data/docs /home/peter/docs --read-only
 ```
 
-**NOTE:** Using `mount` requires that your container runs with the `CAP_SYS_ADMIN` capability turned on. [See this answer for more information](https://github.com/atmoz/sftp/issues/60#issuecomment-332909232).
+**NOTE:** Using `mount` requires that your container runs with the `CAP_SYS_ADMIN` capability turned on. [See this answer for more information](https://github.com/eleneo/sftp/issues/60#issuecomment-332909232).
 
 # What's the difference between Debian and Alpine?
 
