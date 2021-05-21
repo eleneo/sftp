@@ -64,13 +64,28 @@ if [ ! -f "$userConfFinalPath" ]; then
         exit 3
     fi
 
-    # Generate unique ssh keys for this container, if needed
-    if [ ! -f /etc/ssh/ssh_host_ed25519_key ]; then
-        ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N ''
+    if [ -z "$RSAKEY" ]
+    then
+        if [ ! -f /etc/ssh/ssh_host_rsa_key ]; then
+            ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N ''
+        fi
+    else
+        echo "\Set RSA key from env"
+        echo $RSAKEY | base64 --decode > /etc/ssh/ssh_host_rsa_key
+        echo $RSAKEY_PUB | base64 --decode > /etc/ssh/ssh_host_rsa_key.pub
     fi
-    if [ ! -f /etc/ssh/ssh_host_rsa_key ]; then
-        ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N ''
+
+    if [ -z "$ED25519KEY" ]
+    then
+        if [ ! -f /etc/ssh/ssh_host_ed25519_key ]; then
+            ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N ''
+        fi
+    else
+        echo "\Set ED25519 key from env"
+        echo $ED25519KEY | base64 --decode > /etc/ssh/ssh_host_ed25519_key
+        echo $ED25519KEY_PUB | base64 --decode > /etc/ssh/ssh_host_ed25519_key.pub
     fi
+
 
     # Restrict access from other users
     chmod 600 /etc/ssh/ssh_host_ed25519_key || true

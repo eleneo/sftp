@@ -112,6 +112,18 @@ docker run \
     foo::1001
 ```
 
+### SSH Key with Environements variables
+You can set the ssh key by environnements variables
+
+| Variable         | Description     |      |
+| ---------------- | --------------- | ---- |
+| `RSAKEY`         | Private RSA KEY |      |
+| `RSAKEY_PUB`     | Public RSA KEY  |      |
+| `ED25519KEY`     | Private EDKEY   |      |
+| `ED25519KEY_PUB` | Public EDKEYKEY |      |
+
+> Variable value need to be encoded in base64
+
 ## Providing your own SSH host key (recommended)
 
 This container will generate new SSH host keys at first run. To avoid that your users get a MITM warning when you recreate your container (and the host keys changes), you can mount your own host keys.
